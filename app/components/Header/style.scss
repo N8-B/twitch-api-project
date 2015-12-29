@@ -1,0 +1,65 @@
+@import "~react-toolbox/lib/base";
+@import "~react-toolbox/lib/app_bar/config";
+@import "~react-toolbox/lib/button/config";
+
+$title-font-size: 1.8 * $unit;
+
+// You need to boost priority more than the minimum since
+// your build comes with React Toolbox's and we can't
+// ensure the order. You can either set a wrapper or target
+// React Toolbox data attributes to boost
+.appbar {
+  margin-bottom: 2em;
+  > .logo {
+    position: relative;
+  }
+
+  > .logo img {
+    width: 150px;
+    padding: 1em;
+  }
+
+  > .title {
+    font-size: $title-font-size;
+    font-weight: $font-weight-bold;
+    position: relative;
+  }
+
+  > .button {
+    position: absolute;
+    top: $appbar-height - ($button-floating-height / 2);
+    right: $button-floating-height / 2;
+    z-index: $z-index-higher;
+  }
+
+}
+
+.drawer > aside {
+  padding: 1.25em;
+}
+
+.drawer p {
+  text-align: center;
+  line-height: 1.4em;
+  color: $color-text-secondary;
+}
+
+.drawer h5 {
+  text-align: center;
+  margin-bottom: 0.5em;
+}
+.drawer > aside > .drawerLogo > a > img {
+  width: 80px;
+  border-radius: 50%;
+}
+.drawer > aside > .drawerLogo {
+  text-align: center;
+  margin-bottom: 1em;
+}
+.buttonGroup {
+  text-align: center;
+}
+
+.buttonGroup > button {
+  margin-bottom: 0.75em;
+}

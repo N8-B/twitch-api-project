@@ -1,0 +1,17 @@
+@import "~react-toolbox/lib/commons";
+
+.content {
+  padding: $unit;
+  color: $color-primary;
+}
+
+a {
+  color: $color-primary;
+}
+a:active {
+  color: $color-accent;
+}
+
+.globalPadding {
+  padding: 1em;
+}
