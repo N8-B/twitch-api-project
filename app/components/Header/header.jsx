@@ -37,9 +37,9 @@ class Header extends Component {
           <p>Styling of components was done using <a href="https://github.com/react-toolbox/react-toolbox">React Toolbox</a> and follows Google's material design principles.</p> <br />
           <p>Please visit the following links to view the project source and build code.</p><br/>
           <div className={style.buttonGroup}>
-            <Button classname={style.drawerButton} href="" label="Source Code" flat primary /> <br />
-            <Button classname={style.drawerButton} href="" label="Build Code" flat primary /> <br />
-            <Button classname={style.drawerButton} href="" label="Demo" flat primary />
+            <Button classname={style.drawerButton} href="https://github.com/N8-B/twitch-api-project" label="Source Code" flat primary /> <br />
+            <Button classname={style.drawerButton} href="https://github.com/N8-B/twitch-api-project/tree/gh-pages" label="Build Code" flat primary /> <br />
+            <Button classname={style.drawerButton} href="https://N8-B.github.io/twitch-api-project" label="Demo" flat primary />
           </div>
 
         </Drawer>
