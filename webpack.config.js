@@ -13,7 +13,7 @@ module.exports = {
   output: {
     path: path.join(__dirname, 'build'),
     filename: 'twitch-project.js',
-    publicPath: '/'
+    publicPath: ''
   },
   resolve: {
     extensions: ['', '.jsx', '.scss', 'sass', '.js', '.json'],
@@ -33,7 +33,7 @@ module.exports = {
         loader: ExtractTextPlugin.extract('style', 'css?sourceMap&modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!postcss!sass?sourceMap!toolbox')
       }, {
         test: /\.(png|jpg|gif)$/,
-        loader: "file-loader?name=img-[hash:6].[ext]"
+        loader: "file-loader?name=images/img-[hash:6].[ext]"
       }
     ]
   },
