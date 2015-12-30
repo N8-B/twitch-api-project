@@ -24,7 +24,7 @@ import userPlaceholderImage from './components/userPlaceholderImage.png'
 const baseStreamsUrl = 'https://api.twitch.tv/kraken/streams/';
 const baseUsersUrl = 'https://api.twitch.tv/kraken/users/';
 const baseTopVideosUrl = 'https://api.twitch.tv/kraken/videos/top'
-const defaultUsers = [ "freecodecamp", "storbeck", "terakilobyte", "habathcx", "RobotCaleb", "thomasballinger", "noobs2ninjas", "beohoff", "streamerhouse"];
+const defaultUsers = [ "freecodecamp", "storbeck", "terakilobyte", "habathcx", "RobotCaleb", "thomasballinger", "noobs2ninjas", "beohoff", "streamerhouse", "brunofin", "comster404"];
 
 export class App extends Component {
   constructor (props) {
@@ -53,26 +53,57 @@ export class App extends Component {
   fetchUserData(user) {
     request.get(baseUsersUrl + user)
       .end((error, response) => {
-        const get = response.body
-        const name = get.name;
-        const logo = (get.logo) ? get.logo : userPlaceholderImage;
-        const url = 'http://www.twitch.tv/' + name;
-        this.setState({
-          users: this.state.users.concat({
-            url,
-            name,
-            logo,
-            online: false,
-            streamTitle: 'Offline'
-          }),
-          loading: false
-        });
+        if (response.statusCode === 422 || error) {
+          console.log('FetchUserData error: ', error);
+          const get = response.body;
+          const name = user;
+          const message = get.message;
+          const logo = (get.logo) ? get.logo : userPlaceholderImage;
+          this.setState({
+            users: this.state.users.concat({
+              name,
+              logo,
+              online: false,
+              streamTitle: message
+            })
+          });
+        } else if (response.statusText === "OK") {
+          const get = response.body
+          const name = get.name;
+          const logo = (get.logo) ? get.logo : userPlaceholderImage;
+          const url = 'http://www.twitch.tv/' + name;
+          this.setState({
+            users: this.state.users.concat({
+              url,
+              name,
+              logo,
+              online: false,
+              streamTitle: 'Offline'
+            }),
+            loading: false
+          });
+        }
       })
   }
   fetchStreamData(user) {
     request.get(baseStreamsUrl + user)
       .end((error, response) => {
-        if (response.body.stream !== null) {
+        console.log(response);
+        if (response.statusCode === 422 || error) {
+          console.log('FetchStreamData error: ', error);
+          const get = response.body;
+          const name = user;
+          const message = get.message;
+          const logo = (get.logo) ? get.logo : userPlaceholderImage;
+          this.setState({
+            users: this.state.users.concat({
+              name,
+              logo,
+              online: false,
+              streamTitle: message
+            })
+          });
+        } else if (response.body.stream !== null) {
           const get = response.body.stream.channel;
           const name = get.name;
           const logo = (get.logo) ? get.logo : userPlaceholderImage;
@@ -128,6 +159,7 @@ export class App extends Component {
   }
   componentDidMount() {
     console.log('Mounted!');
+    console.log(this.state.users);
     const { userNames } = this.state;
 
     userNames.forEach((user) => {

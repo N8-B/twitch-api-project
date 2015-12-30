@@ -2,5 +2,6 @@
 import React from 'react';
 import { render } from 'react-dom';
 import { App } from './App';
+require('file?name=[name].[ext]!../www/index.html');
 
 render(<App/>, document.getElementById('app'));
