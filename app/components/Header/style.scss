@@ -60,6 +60,6 @@ $title-font-size: 1.8 * $unit;
   text-align: center;
 }
 
-.buttonGroup > button {
+.buttonGroup > a, .drawer > .buttonGroup > a {
   margin-bottom: 0.75em;
 }
