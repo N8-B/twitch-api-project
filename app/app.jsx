@@ -12,6 +12,7 @@ import Spinner from './components/Spinner/spinner';
 import { List, ListItem, ListSubHeader } from 'react-toolbox/lib/list';
 import Input from 'react-toolbox/lib/input';
 import { Tab, Tabs } from 'react-toolbox/lib/tabs';
+import { Card, CardMedia, CardTitle, CardText, CardActions } from 'react-toolbox/lib/card';
 
 // Grid Styling
 const {Grid, Row, Col} = require('react-flexbox-grid');
@@ -43,6 +44,7 @@ export class App extends Component {
     this.fetchStreamData = this.fetchStreamData.bind(this);
     this.fetchTopVideosData = this.fetchTopVideosData.bind(this);
     this.renderList = this.renderList.bind(this);
+    this.renderCards = this.renderCards.bind(this);
     this.handleSearchInputChange = this.handleSearchInputChange.bind(this);
     this.handleSearchInputBlur = this.handleSearchInputBlur.bind(this);
     this.handleTabChange = this.handleTabChange.bind(this);
@@ -128,7 +130,7 @@ export class App extends Component {
     fetch(baseTopVideosUrl)
       .then((response) => {
         const topTenArray = response.body.videos;
-
+        console.log("Top ten: ", topTenArray);
         if (topTenArray) {
           topTenArray.map((video) => {
             const title = video.title;
@@ -165,7 +167,7 @@ export class App extends Component {
     userNames.forEach((user) => {
       this.fetchStreamData(user)
     })
-    // this.fetchTopVideosData();
+    this.fetchTopVideosData();
   }
   renderList () {
     const filteredUsers = this.state.filteredUsers || this.state.users;
@@ -184,6 +186,30 @@ export class App extends Component {
           );
         })}
       </List>
+    );
+  }
+  renderCards () {
+    const topTenUsers = this.state.twitchTopTen.slice(6);
+
+    return (
+      topTenUsers.map((user) => {
+        return (
+          <Col key={user.id} xs={6} sm={3}>
+            <Card key={user.id} className={style.card}>
+              <CardMedia
+                aspectRatio="wide"
+                image={user.thumbnail}
+              />
+              <CardTitle
+                subtitle={user.title}
+              />
+              <CardActions>
+                <Button href={user.url} target="_blank" label="View Channel" primary />
+              </CardActions>
+            </Card>
+          </Col>
+        );
+      })
     );
   }
   handleSearchInputChange (value) {
@@ -241,6 +267,13 @@ export class App extends Component {
     return(
       <ToolboxApp>
         <Header />
+        <Grid className={style.fullwidth}>
+          <Row className={style.topTitle}><h5>Top Channels</h5></Row>
+          <Row>
+            {this.renderCards()}
+          </Row>
+        </Grid>
+
         <Grid className={style.globalPadding}>
           <Row>
             <Col xs={12}>
