@@ -24,8 +24,9 @@ import userPlaceholderImage from './components/userPlaceholderImage.png'
 // Variables
 const baseStreamsUrl = 'https://api.twitch.tv/kraken/streams/';
 const baseUsersUrl = 'https://api.twitch.tv/kraken/users/';
-const baseTopVideosUrl = 'https://api.twitch.tv/kraken/videos/top'
 const defaultUsers = [ "freecodecamp", "storbeck", "terakilobyte", "habathcx", "RobotCaleb", "thomasballinger", "noobs2ninjas", "beohoff", "streamerhouse", "brunofin", "comster404"];
+const clientId = '?client_id=xfmbnwthnr53nfutjyjnf3y17qjbxi';
+const baseTopVideosUrl = 'https://api.twitch.tv/kraken/videos/top' + clientId;
 
 export class App extends Component {
   constructor (props) {
@@ -53,10 +54,9 @@ export class App extends Component {
     this.handleOfflineTabClick = this.handleOfflineTabClick.bind(this);
   }
   fetchUserData(user) {
-    request.get(baseUsersUrl + user)
+    request.get(baseUsersUrl + user + clientId)
       .end((error, response) => {
         if (response.statusCode === 422 || error) {
-          console.log('FetchUserData error: ', error);
           const get = response.body;
           const name = user;
           const message = get.message;
@@ -69,7 +69,7 @@ export class App extends Component {
               streamTitle: message
             })
           });
-        } else if (response.statusText === "OK") {
+        } else if (response.statusCode === 200) {
           const get = response.body
           const name = get.name;
           const logo = (get.logo) ? get.logo : userPlaceholderImage;
@@ -88,11 +88,9 @@ export class App extends Component {
       })
   }
   fetchStreamData(user) {
-    request.get(baseStreamsUrl + user)
+    request.get(baseStreamsUrl + user + clientId)
       .end((error, response) => {
-        console.log(response);
         if (response.statusCode === 422 || error) {
-          console.log('FetchStreamData error: ', error);
           const get = response.body;
           const name = user;
           const message = get.message;
@@ -130,7 +128,6 @@ export class App extends Component {
     fetch(baseTopVideosUrl)
       .then((response) => {
         const topTenArray = response.body.videos;
-        console.log("Top ten: ", topTenArray);
         if (topTenArray) {
           topTenArray.map((video) => {
             const title = video.title;
@@ -154,14 +151,11 @@ export class App extends Component {
       });
   }
   componentWillMount() {
-    console.log('Mounting!');
     this.setState({
       loading: true
     });
   }
   componentDidMount() {
-    console.log('Mounted!');
-    console.log(this.state.users);
     const { userNames } = this.state;
 
     userNames.forEach((user) => {
@@ -193,16 +187,17 @@ export class App extends Component {
 
     return (
       topTenUsers.map((user) => {
+        let userTitle = (user.title.length > 50)
+          ? user.title.slice(0, 41) + '...' : user.title;
+
         return (
-          <Col key={user.id} xs={6} sm={3}>
-            <Card key={user.id} className={style.card}>
+          <Col key={user.url} xs={6} sm={3}>
+            <Card key={user.url} className={style.card}>
               <CardMedia
                 aspectRatio="wide"
                 image={user.thumbnail}
               />
-              <CardTitle
-                subtitle={user.title}
-              />
+              <CardTitle subtitle={userTitle}/>
               <CardActions>
                 <Button href={user.url} target="_blank" label="View Channel" primary />
               </CardActions>
